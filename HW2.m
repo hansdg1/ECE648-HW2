@@ -3,12 +3,8 @@
 % Author: Hans Guthrie %
 %%%%%%%%%%%%%%%%%%%%%%%%
 
-
-[speech1, Fs_speech1, nbits_speech1] = wavread('speech1.wav');
-[speech2, Fs_speech2, nbits_speech2] = wavread('speech2.wav');
-[audio1, Fs_audio1, nbits_audio1] = wavread('audio1.wav');
-
 %% speech1.wav
+[speech1, Fs_speech1, nbits_speech1] = wavread('speech1.wav');
 
 speech1skip1 = speech1(1 : 2 : end); % --> 1,3,5,7,... (every other value)
 sound(speech1skip1,Fs_speech1 / 2);
@@ -19,7 +15,13 @@ pause;
 speech1skip7 = speech1(1 : 8 : end); % --> 1,9,17,...  (every 8th value)
 sound(speech1skip7,Fs_speech1 / 8);
 
+% Quantization
+sound(speech1, Fs_speech1); %play at normal speed\
+Q = 2/64;   %64 levels (N)
+speech1_quantized = sign(S) .* floor(abs(S)/Q) * Q;
+
 %% speech2.wav
+[speech2, Fs_speech2, nbits_speech2] = wavread('speech2.wav');
 
 speech2skip1 = speech2(1 : 2 : end); % --> 1,3,5,7,... (every other value)
 sound(speech2skip1,Fs_speech2 / 2);
@@ -32,6 +34,7 @@ sound(speech2skip7,Fs_speech2 / 8);
 pause;
 
 %% audio1.wav
+[audio1, Fs_audio1, nbits_audio1] = wavread('audio1.wav');
 
 audio1skip1 = audio1(1 : 2 : end); % --> 1,3,5,7,... (every other value)
 sound(audio1skip1,Fs_audio1 / 2);
@@ -45,6 +48,19 @@ pause;
 
 %% 1.2 Quantization
 
-Q = 2/64;   %64 levels (N)
+% 64 Levels
+quantization('speech1.wav',64);
+quantization('speech2.wav',64);
+quantization('audio1.wav',64);
 
-sound(speech1, Fs_speech1); %play at normal speed
+% 32 Levels
+quantization('speech1.wav',32);
+quantization('speech2.wav',32);
+quantization('audio1.wav',32);
+
+% 16 Levels
+quantization('speech1.wav',16);
+quantization('speech2.wav',16);
+quantization('audio1.wav',16);
+
+
